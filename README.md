@@ -102,7 +102,7 @@ python api.py
 
 ### 2. Frontend Setup
 ```bash
-# Navigate to frontend directory in a new terminal
+# Open a second terminal and navigate to frontend directory
 cd frontend
 
 # Install Node dependencies
@@ -111,6 +111,27 @@ npm install
 # Start Vite dev server (runs on http://localhost:5173)
 npm run dev
 ```
+
+### 3. Accessing the Application
+Open your web browser and navigate to **`http://localhost:5173`**.
+
+### 4. Running the Backend Test Suite
+```bash
+# Run the complete backend test suite (from repository root)
+python -m unittest discover -s backend -t backend
+```
+
+### 5. Building the Frontend for Production
+```bash
+# Navigate to frontend directory and build static assets
+cd frontend
+npm run build
+```
+Outputs static production assets into `frontend/dist/`.
+
+### 📌 Important Notes
+- **Automatic Database Initialization**: The SQLite database (`watchlist.db`) is automatically created with all required tables when the backend starts. No pre-existing database file is required.
+- **Market Data & Offline Schedule**: Market data is fetched dynamically via `yfinance`. Outside active NSE market hours (Mon–Fri 09:15–15:30 IST) or on weekends, the system cleanly displays the latest completed trading session alongside explicit market-status banners.
 
 ---
 
