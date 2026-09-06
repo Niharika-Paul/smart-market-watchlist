@@ -697,13 +697,20 @@ def _elapsed_text(checkpoint_at: datetime | None, now: datetime | None = None) -
 
 
 def _history_series(frame: pd.DataFrame, checkpoint_at: datetime) -> list[dict[str, Any]]:
-    if frame.empty:
+    if frame.empty or checkpoint_at is None:
         return []
     cp_date = checkpoint_at.date() if isinstance(checkpoint_at, datetime) else pd.Timestamp(checkpoint_at).date()
     cutoff = pd.Timestamp(cp_date)
-    out = frame[frame["date"] >= cutoff].copy()
+    eligible = frame[frame["date"] <= cutoff]
+    if not eligible.empty:
+        baseline_date = eligible.iloc[-1]["date"]
+    else:
+        baseline_date = frame.iloc[0]["date"]
+
+    out = frame[frame["date"] >= baseline_date].copy()
     if len(out.index) < 2:
-        out = frame.tail(7).copy()
+        return []
+
     series = []
     baseline = _float_or_none(out.iloc[0]["close"])
     for _, row in out.iterrows():

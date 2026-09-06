@@ -854,34 +854,49 @@ function StockDetailDrawer({ symbol, watchlistId, simulatedPreset, onClose }) {
             <div className="drawer-section drawer-animate-item">
               <h3 className="drawer-section-title">Away Period Performance</h3>
               {detail.series?.length ? (
-                <>
-                  <MiniLineChart series={detail.series} />
-                  <dl className="metric-grid">
-                    <Metric label="Stock move" value={formatPercent(detail.assessment?.stock_return)} tone={toneForValue(detail.assessment?.stock_return)} />
-                    <Metric
-                      label="NIFTY move"
-                      value={formatPercent(detail.assessment?.nifty_return)}
-                      tone={toneForValue(detail.assessment?.nifty_return)}
-                    />
-                    <Metric
-                      label="Vs NIFTY"
-                      value={formatPercent(detail.assessment?.relative_performance)}
-                      tone={toneForValue(detail.assessment?.relative_performance)}
-                    />
-                  </dl>
-                  <div className="why-card">
-                    <strong>Why you&apos;re seeing this:</strong>
-                    <p style={{ margin: '6px 0 0' }}>{detail.why?.summary}</p>
-                    {detail.assessment?.unusualness_z !== null && detail.assessment?.unusualness_z !== undefined ? (
-                      <p className="subtle" style={{ fontSize: '0.78rem', marginTop: '6px' }}>
-                        Statistical unusualness score: <strong>{formatNumber(detail.assessment.unusualness_z)} z</strong>
-                      </p>
-                    ) : null}
-                  </div>
-                </>
+                <MiniLineChart series={detail.series} />
               ) : (
-                <p className="subtle">No away-period chart history available.</p>
+                <div
+                  className="chart-empty-state"
+                  style={{
+                    padding: '20px 16px',
+                    textAlign: 'center',
+                    background: 'rgba(253, 252, 250, 0.55)',
+                    borderRadius: '10px',
+                    border: '1px dashed var(--color-border)',
+                    margin: '12px 0 16px',
+                  }}
+                >
+                  <p style={{ margin: 0, fontWeight: 600, color: 'var(--color-text-primary)', fontSize: '0.88rem' }}>
+                    No market movement since your last check
+                  </p>
+                  <p className="subtle" style={{ margin: '4px 0 0', fontSize: '0.78rem' }}>
+                    Latest available market data is from before your checkpoint.
+                  </p>
+                </div>
               )}
+              <dl className="metric-grid">
+                <Metric label="Stock move" value={formatPercent(detail.assessment?.stock_return)} tone={toneForValue(detail.assessment?.stock_return)} />
+                <Metric
+                  label="NIFTY move"
+                  value={formatPercent(detail.assessment?.nifty_return)}
+                  tone={toneForValue(detail.assessment?.nifty_return)}
+                />
+                <Metric
+                  label="Vs NIFTY"
+                  value={formatPercent(detail.assessment?.relative_performance)}
+                  tone={toneForValue(detail.assessment?.relative_performance)}
+                />
+              </dl>
+              <div className="why-card">
+                <strong>Why you&apos;re seeing this:</strong>
+                <p style={{ margin: '6px 0 0' }}>{detail.why?.summary}</p>
+                {detail.assessment?.unusualness_z !== null && detail.assessment?.unusualness_z !== undefined ? (
+                  <p className="subtle" style={{ fontSize: '0.78rem', marginTop: '6px' }}>
+                    Statistical unusualness score: <strong>{formatNumber(detail.assessment.unusualness_z)} z</strong>
+                  </p>
+                ) : null}
+              </div>
             </div>
 
             {/* Section 2: Volume Trading Activity */}
