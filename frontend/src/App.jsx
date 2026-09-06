@@ -736,7 +736,6 @@ function StockDetailDrawer({ symbol, watchlistId, simulatedPreset, onClose }) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [closing, setClosing] = useState(false)
-  const [showRecentHistory, setShowRecentHistory] = useState(false)
 
   const handleClose = () => {
     if (closing) return
@@ -818,27 +817,7 @@ function StockDetailDrawer({ symbol, watchlistId, simulatedPreset, onClose }) {
                   <span style={{ fontSize: '0.75rem', color: 'var(--muted)' }}>{detail.elapsed_text}</span>
                 </div>
                 <div className="volume-item">
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>📈 LATEST MARKET DATA</span>
-                    {detail.recent_history?.length ? (
-                      <button
-                        type="button"
-                        onClick={() => setShowRecentHistory(!showRecentHistory)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: 'var(--accent, #594B43)',
-                          fontSize: '0.72rem',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          padding: 0,
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        {showRecentHistory ? 'Hide history ↑' : 'View recent history →'}
-                      </button>
-                    ) : null}
-                  </div>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 600 }}>📈 LATEST MARKET DATA</span>
                   <strong style={{ fontSize: '0.92rem' }}>
                     {formatDateTime(detail.assessment?.latest_market_timestamp || detail.latest_price_date)}
                   </strong>
@@ -855,31 +834,6 @@ function StockDetailDrawer({ symbol, watchlistId, simulatedPreset, onClose }) {
                 </div>
               ) : null}
             </div>
-
-            {/* Expandable Recent Market History Box */}
-            {showRecentHistory && detail.recent_history?.length ? (
-              <div
-                className="recent-history-box drawer-animate-item"
-                style={{
-                  marginTop: '10px',
-                  padding: '14px 16px',
-                  background: 'rgba(253, 252, 250, 0.95)',
-                  borderRadius: '10px',
-                  border: '1px solid var(--border)',
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--color-text-secondary)' }}>
-                    Recent Market History
-                  </span>
-                  <span className="subtle" style={{ fontSize: '0.75rem' }}>Last 7 trading sessions</span>
-                </div>
-                <MiniLineChart series={detail.recent_history} />
-                <p className="subtle" style={{ margin: '6px 0 0', fontSize: '0.75rem' }}>
-                  Price trend from {detail.recent_history[0]?.date} to {detail.recent_history.at(-1)?.date} (independent of checkpoint).
-                </p>
-              </div>
-            ) : null}
 
             {/* Header Metrics */}
             <div className="change-grid drawer-animate-item">

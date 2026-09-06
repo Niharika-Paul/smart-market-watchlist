@@ -360,7 +360,6 @@ def create_app(
                 "why": why,
                 "series": series,
                 "nifty_series": nifty_series,
-                "recent_history": _recent_history_series(stock_daily, count=7),
                 "volume_metrics": volume_metrics,
                 "peers": peers,
                 "sector_performance": sector_perf,
@@ -712,27 +711,6 @@ def _history_series(frame: pd.DataFrame, checkpoint_at: datetime) -> list[dict[s
     if len(out.index) < 2:
         return []
 
-    series = []
-    baseline = _float_or_none(out.iloc[0]["close"])
-    for _, row in out.iterrows():
-        close = _float_or_none(row["close"])
-        rel = None
-        if baseline not in (None, 0) and close is not None:
-            rel = close / baseline - 1.0
-        series.append(
-            {
-                "date": _date_value(row["date"]),
-                "close": close,
-                "relative_to_checkpoint": rel,
-            }
-        )
-    return series
-
-
-def _recent_history_series(frame: pd.DataFrame, count: int = 7) -> list[dict[str, Any]]:
-    if frame.empty:
-        return []
-    out = frame.tail(count).copy()
     series = []
     baseline = _float_or_none(out.iloc[0]["close"])
     for _, row in out.iterrows():
